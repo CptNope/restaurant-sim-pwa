@@ -13,7 +13,7 @@ For a deep technical dive into the simulation engine, state machines, and render
 | Feature | Description |
 |---|---|
 | 🧠 **Autonomous simulation** | Guests and staff run on independent finite-state machines — no scripted paths, everything emerges from the tick loop |
-| 🗺️ **A* pathfinding** | Every character navigates a live collision grid that updates as furniture is placed or removed |
+| 🗺️ **A\* pathfinding** | Every character navigates a live collision grid that updates as furniture is placed or removed |
 | 🏗️ **Floorplan editor** | Drag-and-drop kitchen equipment, dining tables, bar and decor onto a 16×16 grid |
 | 👥 **Staff customization studio** | Hire hosts, waiters, chefs, and bussers; tune stats (speed, cooking, charisma, stamina, cleanliness) and appearance |
 | 📋 **Menu & recipe editor** | Create dishes with prep stations, prep time, cost, price, and popularity that directly drive guest ordering behavior |
