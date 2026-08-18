@@ -19,8 +19,26 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(err => {
+          // updateViaCache: 'none' stops the browser's HTTP cache from ever
+          // shadowing sw.js itself, so version checks always see the real file.
+          navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then((registration) => {
+            // Proactively re-check for a new service worker whenever the tab
+            // regains focus, instead of waiting for the next hard navigation.
+            document.addEventListener('visibilitychange', () => {
+              if (document.visibilityState === 'visible') registration.update();
+            });
+          }).catch(err => {
             console.log('SW registration skipped or failed:', err);
+          });
+
+          // Once a new service worker takes control (it calls skipWaiting +
+          // clients.claim on activate), reload so the tab actually picks up
+          // the fresh index.html and hashed assets instead of updating silently.
+          let refreshingAfterUpdate = false;
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshingAfterUpdate) return;
+            refreshingAfterUpdate = true;
+            window.location.reload();
           });
         });
       }
