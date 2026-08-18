@@ -5,6 +5,8 @@ import { StaffMember, GuestEntity, PlacedObject } from '../types/restaurant';
 
 export class RestaurantScene extends Phaser.Scene {
   public static readonly TILE_SIZE = 32;
+  public static readonly MIN_ZOOM = 0.7;
+  public static readonly MAX_ZOOM = 2.0;
 
   private floorContainer!: Phaser.GameObjects.Container;
   private objectContainer!: Phaser.GameObjects.Container;
@@ -52,16 +54,21 @@ export class RestaurantScene extends Phaser.Scene {
     // Camera setup
     const worldWidth = simulation.gridWidth * RestaurantScene.TILE_SIZE;
     const worldHeight = simulation.gridHeight * RestaurantScene.TILE_SIZE;
-    this.cameras.main.setBounds(-50, -50, worldWidth + 100, worldHeight + 100);
+    this.updateCameraBounds();
     this.cameras.main.centerOn(worldWidth / 2, worldHeight / 2);
+
+    // Bounds must be re-derived whenever the canvas is resized (window resize,
+    // orientation change, mobile browser chrome show/hide): they're sized
+    // around the current viewport so a fixed rect would go stale.
+    this.scale.on('resize', () => this.updateCameraBounds());
 
     // Pan & Zoom controls
     this.input.on('wheel', (_pointer: Phaser.Input.Pointer, _gameObjects: unknown[], _deltaX: number, deltaY: number) => {
       const zoom = this.cameras.main.zoom;
       if (deltaY > 0) {
-        this.cameras.main.setZoom(Math.max(0.7, zoom - 0.1));
+        this.cameras.main.setZoom(Math.max(RestaurantScene.MIN_ZOOM, zoom - 0.1));
       } else {
-        this.cameras.main.setZoom(Math.min(2.0, zoom + 0.1));
+        this.cameras.main.setZoom(Math.min(RestaurantScene.MAX_ZOOM, zoom + 0.1));
       }
     });
 
@@ -118,7 +125,11 @@ export class RestaurantScene extends Phaser.Scene {
         const [p1, p2] = Array.from(activeTouches.values());
         const dist = Phaser.Math.Distance.Between(p1.x, p1.y, p2.x, p2.y);
         if (pinchStartDistance > 0) {
-          const newZoom = Phaser.Math.Clamp(pinchStartZoom * (dist / pinchStartDistance), 0.7, 2.0);
+          const newZoom = Phaser.Math.Clamp(
+            pinchStartZoom * (dist / pinchStartDistance),
+            RestaurantScene.MIN_ZOOM,
+            RestaurantScene.MAX_ZOOM
+          );
           this.cameras.main.setZoom(newZoom);
         }
       } else if (activeTouches.size === 1 && touchPanStart) {
@@ -160,6 +171,28 @@ export class RestaurantScene extends Phaser.Scene {
     this.input.on('pointerupoutside', (pointer: Phaser.Input.Pointer) => {
       endTouch(pointer);
     });
+  }
+
+  /**
+   * Camera bounds must stay large enough to contain the viewport at the
+   * most-zoomed-out level (MIN_ZOOM). If bounds are smaller than the
+   * viewport-in-world-units at the current zoom, Phaser clamps the camera
+   * flush against an edge and panning stops working entirely in that
+   * direction — this is what caused the map to get "stuck" at the top
+   * once zoomed out on a tall viewport. Padding is derived from the canvas
+   * size so it self-adjusts on resize/orientation change instead of being
+   * a fixed guess.
+   */
+  private updateCameraBounds() {
+    const worldWidth = simulation.gridWidth * RestaurantScene.TILE_SIZE;
+    const worldHeight = simulation.gridHeight * RestaurantScene.TILE_SIZE;
+    const viewportWidthAtMinZoom = this.scale.width / RestaurantScene.MIN_ZOOM;
+    const viewportHeightAtMinZoom = this.scale.height / RestaurantScene.MIN_ZOOM;
+
+    const padX = Math.max(50, (viewportWidthAtMinZoom - worldWidth) / 2 + 50);
+    const padY = Math.max(50, (viewportHeightAtMinZoom - worldHeight) / 2 + 50);
+
+    this.cameras.main.setBounds(-padX, -padY, worldWidth + padX * 2, worldHeight + padY * 2);
   }
 
   public renderFloorGrid() {
