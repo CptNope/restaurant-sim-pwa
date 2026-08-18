@@ -4,7 +4,7 @@ A 2D top-down restaurant management simulator built with **React**, **Phaser 3**
 
 **🔗 Live demo: [cptnope.github.io/restaurant-sim-pwa](https://cptnope.github.io/restaurant-sim-pwa/)**
 
-For a deep technical dive into the simulation engine, state machines, and rendering pipeline, see **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+For a deep technical dive into the simulation engine, state machines, and rendering pipeline, see **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**. See **[CHANGELOG.md](CHANGELOG.md)** for release history.
 
 ---
 
@@ -23,6 +23,7 @@ For a deep technical dive into the simulation engine, state machines, and render
 | 🔊 **Procedural audio** | All sound effects are synthesized live via the Web Audio API — zero audio files |
 | 📱 **Installable PWA** | Manifest + service worker for offline-capable, installable play |
 | 💾 **Save / load** | Auto-persists to `localStorage`, plus JSON export/import for sharing a save |
+| 🤏 **Fully responsive & touch-ready** | Playable on phones and tablets — the HUD collapses to icon-only navigation, editor modals stack into single-column layouts, and the game canvas supports single-finger pan and two-finger pinch-to-zoom |
 
 ---
 
@@ -71,6 +72,9 @@ React never renders game entities directly — Phaser owns the canvas and reads 
 | Left click | Select a guest, staff member, or object |
 | Right-click drag / Shift + drag | Pan camera |
 | Scroll wheel | Zoom camera (0.7×–2.0×) |
+| Tap | Select a guest, staff member, or object *(touch)* |
+| One-finger drag | Pan camera *(touch)* |
+| Two-finger pinch | Zoom camera (0.7×–2.0×) *(touch)* |
 
 ---
 

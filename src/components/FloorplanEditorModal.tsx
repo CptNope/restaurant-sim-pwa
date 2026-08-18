@@ -148,28 +148,29 @@ export const FloorplanEditorModal: React.FC<FloorplanEditorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-surface border border-slate-700/80 rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-0 sm:p-4">
+      <div className="bg-surface border border-slate-700/80 sm:rounded-2xl w-full max-w-5xl h-full sm:h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/80 bg-slate-900/60">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-slate-700/80 bg-slate-900/60">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30 shrink-0">
               <Hammer className="w-5 h-5" />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-lg font-bold text-white flex items-center gap-2 truncate">
                 Floorplan & Architecture Studio
               </h2>
-              <p className="text-xs text-slate-400">Design restaurant layout, arrange seating, and build kitchen workflows</p>
+              <p className="hidden sm:block text-xs text-slate-400">Design restaurant layout, arrange seating, and build kitchen workflows</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               onClick={handleSaveAndApply}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold shadow-glow-green transition"
+              title="Apply to Restaurant"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold shadow-glow-green transition"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>Apply to Restaurant</span>
+              <span className="hidden sm:inline">Apply to Restaurant</span>
             </button>
             <button
               onClick={onClose}
@@ -181,9 +182,9 @@ export const FloorplanEditorModal: React.FC<FloorplanEditorModalProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           {/* Left Palette Sidebar */}
-          <div className="w-80 border-r border-slate-700/80 bg-slate-900/40 p-4 flex flex-col gap-4 overflow-y-auto">
+          <div className="w-full md:w-80 max-h-[38vh] md:max-h-none shrink-0 border-b md:border-b-0 md:border-r border-slate-700/80 bg-slate-900/40 p-4 flex flex-col gap-4 overflow-y-auto">
             {/* Tool Selection */}
             <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1">
               <button
@@ -305,7 +306,7 @@ export const FloorplanEditorModal: React.FC<FloorplanEditorModalProps> = ({
           </div>
 
           {/* Right Grid Canvas Area */}
-          <div className="flex-1 p-6 flex flex-col items-center justify-center bg-slate-950/60 overflow-auto">
+          <div className="flex-1 p-3 sm:p-6 flex flex-col items-center justify-center bg-slate-950/60 overflow-auto">
             <div
               className="grid gap-0.5 p-3 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl relative"
               style={{

@@ -24,7 +24,7 @@ export const OrderQueueTracker: React.FC<OrderQueueTrackerProps> = ({ isOpen, on
   const activeTickets = tickets.filter((t) => t.status !== 'served' && t.status !== 'cancelled');
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-96 bg-surface/95 backdrop-blur-md border-l border-slate-700/80 shadow-2xl flex flex-col animate-slideLeft">
+    <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-surface/95 backdrop-blur-md border-l border-slate-700/80 shadow-2xl flex flex-col animate-slideLeft">
       {/* Header */}
       <div className="p-4 border-b border-slate-700/80 flex items-center justify-between bg-slate-900/60">
         <div className="flex items-center gap-2.5">

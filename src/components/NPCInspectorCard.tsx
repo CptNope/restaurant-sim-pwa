@@ -19,7 +19,7 @@ export const NPCInspectorCard: React.FC<NPCInspectorCardProps> = ({
   const { type, data } = selectedEntity;
 
   return (
-    <div className="absolute top-20 right-4 z-40 w-80 bg-surface/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 shadow-glass animate-fadeIn text-slate-100 select-none">
+    <div className="absolute top-32 sm:top-20 right-2 sm:right-4 z-40 w-[calc(100vw-1rem)] max-w-80 sm:w-80 max-h-[70vh] overflow-y-auto bg-surface/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 shadow-glass animate-fadeIn text-slate-100 select-none">
       {/* Card Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-700/70">
         <div className="flex items-center gap-2">

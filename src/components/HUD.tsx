@@ -68,22 +68,22 @@ export const HUD: React.FC<HUDProps> = ({
   };
 
   return (
-    <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-3 select-none">
+    <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-2 sm:p-3 select-none pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.5rem,env(safe-area-inset-bottom))] pl-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">
       {/* Top Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pointer-events-auto bg-surface/85 backdrop-blur-md border border-slate-700/60 rounded-2xl p-2.5 shadow-glass">
+      <div className="flex flex-wrap items-center justify-between gap-2 pointer-events-auto bg-surface/85 backdrop-blur-md border border-slate-700/60 rounded-2xl p-2 sm:p-2.5 shadow-glass">
         {/* Brand & Day */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center shadow-glow text-slate-900 font-extrabold text-xl">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center shadow-glow text-slate-900 font-extrabold text-lg sm:text-xl shrink-0">
             🍳
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-base tracking-wide text-white">ChefAI Bistro</h1>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+              <h1 className="font-bold text-sm sm:text-base tracking-wide text-white">ChefAI Bistro</h1>
+              <span className="text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
                 DAY {simulation.day}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-400">
               <Clock className="w-3.5 h-3.5 text-amber-400" />
               <span>{formatTime(simulation.timeOfDaySeconds)}</span>
             </div>
@@ -93,16 +93,16 @@ export const HUD: React.FC<HUDProps> = ({
         {/* Stats Strip */}
         <div className="flex items-center gap-2 md:gap-5 flex-wrap">
           {/* Balance */}
-          <div className="flex items-center gap-1.5 bg-slate-900/80 border border-emerald-500/30 px-3 py-1.5 rounded-xl shadow-glow-green">
+          <div className="flex items-center gap-1.5 bg-slate-900/80 border border-emerald-500/30 px-2.5 sm:px-3 py-1.5 rounded-xl shadow-glow-green">
             <DollarSign className="w-4 h-4 text-emerald-400" />
             <div className="flex flex-col">
-              <span className="text-[10px] text-slate-400 font-semibold uppercase">Cash Balance</span>
+              <span className="text-[10px] text-slate-400 font-semibold uppercase">Cash</span>
               <span className="text-sm font-bold text-emerald-300 font-mono">${cash.toFixed(2)}</span>
             </div>
           </div>
 
           {/* Daily Revenue */}
-          <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-700/50 px-3 py-1.5 rounded-xl">
+          <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/80 border border-slate-700/50 px-3 py-1.5 rounded-xl">
             <div className="flex flex-col">
               <span className="text-[10px] text-slate-400 font-semibold uppercase">Today Revenue</span>
               <span className="text-sm font-bold text-amber-300 font-mono">+${revenue.toFixed(2)}</span>
@@ -112,7 +112,7 @@ export const HUD: React.FC<HUDProps> = ({
           {/* Reputation Stars */}
           <div
             onClick={onOpenReviews}
-            className="flex items-center gap-1.5 bg-slate-900/80 border border-amber-500/30 px-3 py-1.5 rounded-xl cursor-pointer hover:border-amber-400 transition"
+            className="flex items-center gap-1.5 bg-slate-900/80 border border-amber-500/30 px-2.5 sm:px-3 py-1.5 rounded-xl cursor-pointer hover:border-amber-400 transition"
           >
             <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
             <div className="flex flex-col">
@@ -122,7 +122,7 @@ export const HUD: React.FC<HUDProps> = ({
           </div>
 
           {/* Customers Served */}
-          <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-700/50 px-3 py-1.5 rounded-xl">
+          <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/80 border border-slate-700/50 px-3 py-1.5 rounded-xl">
             <div className="flex flex-col">
               <span className="text-[10px] text-slate-400 font-semibold uppercase">Guests Served</span>
               <span className="text-sm font-bold text-blue-300 font-mono">{served}</span>
@@ -141,7 +141,7 @@ export const HUD: React.FC<HUDProps> = ({
                 !aiEnabled ? '🤖 Autonomous AI Director: ENGAGED' : '⏸️ Autonomous AI Director: MANUAL MODE'
               );
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition border ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition border ${
               aiEnabled
                 ? 'bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-400 text-white shadow-glow'
                 : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
@@ -149,7 +149,7 @@ export const HUD: React.FC<HUDProps> = ({
             title="Toggle autonomous AI auto-pilot"
           >
             <Sparkles className={`w-3.5 h-3.5 ${aiEnabled ? 'animate-spin' : ''}`} />
-            <span>{aiEnabled ? 'AI Auto-Pilot: ON' : 'AI: OFF'}</span>
+            <span className="hidden sm:inline">{aiEnabled ? 'AI Auto-Pilot: ON' : 'AI: OFF'}</span>
           </button>
 
           {/* Speed Controls */}
@@ -186,7 +186,7 @@ export const HUD: React.FC<HUDProps> = ({
                 gameSpeed === 2.5 && !isPaused ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'
               }`}
             >
-              <FastForward className="w-3.5 h-3.5 inline" /> 2.5x
+              <FastForward className="w-3.5 h-3.5 inline" /> <span className="hidden sm:inline">2.5x</span>
             </button>
             <button
               onClick={() => {
@@ -227,38 +227,46 @@ export const HUD: React.FC<HUDProps> = ({
       )}
 
       {/* Bottom Main Navigation Action Bar */}
-      <div className="flex justify-center pointer-events-auto mt-auto">
-        <div className="flex items-center gap-2 bg-surface/90 backdrop-blur-md border border-slate-700/60 rounded-2xl p-2 shadow-glass flex-wrap justify-center">
+      <div className="flex justify-center pointer-events-auto mt-auto max-w-full overflow-x-auto">
+        <div className="flex items-center gap-1.5 sm:gap-2 bg-surface/90 backdrop-blur-md border border-slate-700/60 rounded-2xl p-1.5 sm:p-2 shadow-glass flex-wrap justify-center">
           <button
             onClick={onOpenFloorplan}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
+            title="Floorplan Builder"
+            aria-label="Floorplan Builder"
+            className="flex items-center gap-2 px-3 sm:px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
           >
             <LayoutGrid className="w-4 h-4 text-blue-400" />
-            <span>Floorplan Builder</span>
+            <span className="hidden sm:inline">Floorplan Builder</span>
           </button>
 
           <button
             onClick={onOpenStaffEditor}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
+            title="Staff & NPC Editor"
+            aria-label="Staff & NPC Editor"
+            className="flex items-center gap-2 px-3 sm:px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
           >
             <Users className="w-4 h-4 text-purple-400" />
-            <span>Staff & NPC Editor</span>
+            <span className="hidden sm:inline">Staff & NPC Editor</span>
           </button>
 
           <button
             onClick={onOpenMenuEditor}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
+            title="Menu & Recipes"
+            aria-label="Menu & Recipes"
+            className="flex items-center gap-2 px-3 sm:px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
           >
             <UtensilsCrossed className="w-4 h-4 text-amber-400" />
-            <span>Menu & Recipes</span>
+            <span className="hidden sm:inline">Menu & Recipes</span>
           </button>
 
           <button
             onClick={onOpenTickets}
-            className="relative flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
+            title="Live Tickets"
+            aria-label="Live Tickets"
+            className="relative flex items-center gap-2 px-3 sm:px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
           >
             <Receipt className="w-4 h-4 text-emerald-400" />
-            <span>Live Tickets</span>
+            <span className="hidden sm:inline">Live Tickets</span>
             {activeTicketCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-bold text-[10px] flex items-center justify-center animate-pulse">
                 {activeTicketCount}
@@ -268,18 +276,22 @@ export const HUD: React.FC<HUDProps> = ({
 
           <button
             onClick={onOpenReviews}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
+            title="Reviews & Daily Report"
+            aria-label="Reviews & Daily Report"
+            className="flex items-center gap-2 px-3 sm:px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
           >
             <Award className="w-4 h-4 text-pink-400" />
-            <span>Reviews & Daily Report</span>
+            <span className="hidden sm:inline">Reviews & Daily Report</span>
           </button>
 
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
+            title="Game Settings"
+            aria-label="Game Settings"
+            className="flex items-center gap-2 px-3 sm:px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition"
           >
             <Sliders className="w-4 h-4 text-slate-400" />
-            <span>Game Settings</span>
+            <span className="hidden sm:inline">Game Settings</span>
           </button>
         </div>
       </div>

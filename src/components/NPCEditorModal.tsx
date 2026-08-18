@@ -82,26 +82,27 @@ export const NPCEditorModal: React.FC<NPCEditorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-surface border border-slate-700/80 rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-0 sm:p-4">
+      <div className="bg-surface border border-slate-700/80 sm:rounded-2xl w-full max-w-5xl h-full sm:h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/80 bg-slate-900/60">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/30">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-slate-700/80 bg-slate-900/60">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/30 shrink-0">
               <Palette className="w-5 h-5" />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-white">Staff Roster & Character Studio</h2>
-              <p className="text-xs text-slate-400">Customize appearance, skill stats, roles, and manage restaurant staff</p>
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-lg font-bold text-white truncate">Staff Roster & Character Studio</h2>
+              <p className="hidden sm:block text-xs text-slate-400">Customize appearance, skill stats, roles, and manage restaurant staff</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               onClick={handleSaveAndApply}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold shadow-glow transition"
+              title="Save & Update Staff"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold shadow-glow transition"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>Save & Update Staff</span>
+              <span className="hidden sm:inline">Save & Update Staff</span>
             </button>
             <button
               onClick={onClose}
@@ -113,9 +114,9 @@ export const NPCEditorModal: React.FC<NPCEditorModalProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           {/* Left Staff List */}
-          <div className="w-72 border-r border-slate-700/80 bg-slate-900/40 p-4 flex flex-col gap-3 overflow-y-auto">
+          <div className="w-full md:w-72 max-h-[38vh] md:max-h-none shrink-0 border-b md:border-b-0 md:border-r border-slate-700/80 bg-slate-900/40 p-4 flex flex-col gap-3 overflow-y-auto">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                 Staff Members ({staffList.length})
@@ -184,7 +185,7 @@ export const NPCEditorModal: React.FC<NPCEditorModalProps> = ({
 
           {/* Right Staff Details & Visual Customizer */}
           {currentMember && (
-            <div className="flex-1 p-6 flex flex-col gap-6 overflow-y-auto bg-slate-950/40">
+            <div className="flex-1 p-4 sm:p-6 flex flex-col gap-6 overflow-y-auto bg-slate-950/40">
               {/* Profile Card & Avatar Live Render */}
               <div className="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/80 border border-slate-700/80">
                 <div className="flex items-center gap-5">

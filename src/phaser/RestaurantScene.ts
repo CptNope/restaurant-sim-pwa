@@ -68,10 +68,38 @@ export class RestaurantScene extends Phaser.Scene {
     let isDragging = false;
     let dragStartPos = { x: 0, y: 0 };
 
+    // Touch gesture state: single-finger pan + two-finger pinch-to-zoom
+    const activeTouches = new Map<number, { x: number; y: number }>();
+    const TOUCH_DRAG_THRESHOLD = 8;
+    let touchPanStart: { x: number; y: number } | null = null;
+    let touchPanCameraStart = { x: 0, y: 0 };
+    let isTouchPanning = false;
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
+
+    const isTouchPointer = (pointer: Phaser.Input.Pointer) => pointer.wasTouch;
+
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (pointer.rightButtonDown() || pointer.middleButtonDown() || pointer.event.shiftKey) {
         isDragging = true;
         dragStartPos = { x: pointer.x, y: pointer.y };
+        return;
+      }
+
+      if (!isTouchPointer(pointer)) return;
+
+      activeTouches.set(pointer.id, { x: pointer.x, y: pointer.y });
+
+      if (activeTouches.size === 1) {
+        touchPanStart = { x: pointer.x, y: pointer.y };
+        touchPanCameraStart = { x: this.cameras.main.scrollX, y: this.cameras.main.scrollY };
+        isTouchPanning = false;
+      } else if (activeTouches.size === 2) {
+        const [p1, p2] = Array.from(activeTouches.values());
+        pinchStartDistance = Phaser.Math.Distance.Between(p1.x, p1.y, p2.x, p2.y);
+        pinchStartZoom = this.cameras.main.zoom;
+        touchPanStart = null;
+        isTouchPanning = false;
       }
     });
 
@@ -80,11 +108,57 @@ export class RestaurantScene extends Phaser.Scene {
         this.cameras.main.scrollX -= (pointer.x - dragStartPos.x) / this.cameras.main.zoom;
         this.cameras.main.scrollY -= (pointer.y - dragStartPos.y) / this.cameras.main.zoom;
         dragStartPos = { x: pointer.x, y: pointer.y };
+        return;
+      }
+
+      if (!isTouchPointer(pointer) || !activeTouches.has(pointer.id)) return;
+      activeTouches.set(pointer.id, { x: pointer.x, y: pointer.y });
+
+      if (activeTouches.size === 2) {
+        const [p1, p2] = Array.from(activeTouches.values());
+        const dist = Phaser.Math.Distance.Between(p1.x, p1.y, p2.x, p2.y);
+        if (pinchStartDistance > 0) {
+          const newZoom = Phaser.Math.Clamp(pinchStartZoom * (dist / pinchStartDistance), 0.7, 2.0);
+          this.cameras.main.setZoom(newZoom);
+        }
+      } else if (activeTouches.size === 1 && touchPanStart) {
+        const dx = pointer.x - touchPanStart.x;
+        const dy = pointer.y - touchPanStart.y;
+        if (!isTouchPanning && Math.hypot(dx, dy) > TOUCH_DRAG_THRESHOLD) {
+          isTouchPanning = true;
+        }
+        if (isTouchPanning) {
+          this.cameras.main.scrollX = touchPanCameraStart.x - dx / this.cameras.main.zoom;
+          this.cameras.main.scrollY = touchPanCameraStart.y - dy / this.cameras.main.zoom;
+        }
       }
     });
 
-    this.input.on('pointerup', () => {
+    const endTouch = (pointer: Phaser.Input.Pointer) => {
+      if (!isTouchPointer(pointer)) return;
+      activeTouches.delete(pointer.id);
+
+      if (activeTouches.size < 2) pinchStartDistance = 0;
+
+      if (activeTouches.size === 1) {
+        // One finger remains after a pinch or a multi-touch release: resume panning from here
+        const remaining = Array.from(activeTouches.values())[0];
+        touchPanStart = { x: remaining.x, y: remaining.y };
+        touchPanCameraStart = { x: this.cameras.main.scrollX, y: this.cameras.main.scrollY };
+        isTouchPanning = false;
+      } else if (activeTouches.size === 0) {
+        touchPanStart = null;
+        isTouchPanning = false;
+      }
+    };
+
+    this.input.on('pointerup', (pointer: Phaser.Input.Pointer) => {
       isDragging = false;
+      endTouch(pointer);
+    });
+
+    this.input.on('pointerupoutside', (pointer: Phaser.Input.Pointer) => {
+      endTouch(pointer);
     });
   }
 

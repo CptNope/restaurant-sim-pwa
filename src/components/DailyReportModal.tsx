@@ -24,29 +24,29 @@ export const DailyReportModal: React.FC<DailyReportModalProps> = ({ isOpen, onCl
   const bestStaff = [...simulation.staff].sort((a, b) => b.tablesServedCount - a.tablesServedCount)[0];
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-surface border border-slate-700/80 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-0 sm:p-4">
+      <div className="bg-surface border border-slate-700/80 sm:rounded-2xl w-full max-w-4xl h-full sm:h-auto sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/80 bg-slate-900/60">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center border border-pink-500/30">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-slate-700/80 bg-slate-900/60">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center border border-pink-500/30 shrink-0">
               <Award className="w-5 h-5" />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-white">Daily Ledger & Guest Reviews</h2>
-              <p className="text-xs text-slate-400">Yelp critic reviews, revenue analytics, and employee awards</p>
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-lg font-bold text-white truncate">Daily Ledger & Guest Reviews</h2>
+              <p className="hidden sm:block text-xs text-slate-400">Yelp critic reviews, revenue analytics, and employee awards</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="p-6 flex flex-col gap-6 overflow-y-auto bg-slate-950/40">
+        <div className="p-4 sm:p-6 flex flex-col gap-6 overflow-y-auto bg-slate-950/40">
           {/* Top KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             {/* Reputation Rating */}

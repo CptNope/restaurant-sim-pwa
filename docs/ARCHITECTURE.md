@@ -347,7 +347,19 @@ flowchart TB
 
 All textures — floor tiles, furniture, character avatars — are drawn procedurally onto `Phaser.Textures.CanvasTexture` at scene `create()` time via [`SpriteGenerator`](../src/phaser/SpriteGenerator.ts) (2D canvas `fillRect`/`fillText` calls), so the project ships **zero binary art assets**. Staff and guest avatars are generated per-entity from their `AvatarAppearance` (skin/hair/shirt/pants colors, hair style), so no two characters look alike by default.
 
-Camera controls (scroll-to-zoom, right-click/Shift-drag to pan) are wired directly on `this.input` in `create()`.
+Camera controls are wired directly on `this.input` in `create()`, with separate code paths for mouse and touch since Phaser reports both through the same `pointerdown`/`pointermove`/`pointerup` events:
+
+| Input | Desktop (mouse/trackpad) | Mobile (touch) |
+|---|---|---|
+| Zoom | Scroll wheel, ±0.1 per notch | Two-finger pinch, scaled continuously from the pinch-start distance |
+| Pan | Right-click drag, middle-click drag, or Shift+drag | Single-finger drag |
+| Select | Left click on a sprite | Tap on a sprite |
+
+Touch pointers are distinguished from mouse pointers via `pointer.wasTouch`, and the game is configured with `input.activePointers: 3` (see [`PhaserContainer.tsx`](../src/phaser/PhaserContainer.tsx)) so Phaser tracks a second and third simultaneous touch instead of discarding them — the default is a single active pointer, which would make pinch gestures invisible to the input system entirely.
+
+A single-finger touch doesn't start panning immediately: the scene tracks the distance moved since `pointerdown` and only begins scrolling the camera once it crosses an 8px threshold. Below that threshold the gesture is treated as a tap, so a quick touch on a guest or staff sprite still fires that sprite's own `pointerdown` selection handler instead of being swallowed by camera panning. When a second finger touches down mid-drag, the gesture switches to pinch-zoom and single-finger pan state resets; lifting back to one finger resumes panning from that finger's current position.
+
+Native browser gestures (page pinch-zoom, pull-to-refresh, double-tap-to-zoom) are disabled globally via `touch-action: none` on `<body>` (in [`index.css`](../src/index.css)) plus `user-scalable=no` on the viewport meta tag, so they never compete with the custom camera gestures above.
 
 ---
 

@@ -37,6 +37,9 @@ export const PhaserContainer: React.FC<PhaserContainerProps> = ({ onSelectEntity
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,
       },
+      input: {
+        activePointers: 3, // track up to 3 simultaneous touches for pinch-to-zoom
+      },
     };
 
     const game = new Phaser.Game(config);
@@ -52,9 +55,11 @@ export const PhaserContainer: React.FC<PhaserContainerProps> = ({ onSelectEntity
     };
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
       game.destroy(true);
       gameRef.current = null;
       if (sceneRef) sceneRef.current = null;
@@ -64,7 +69,7 @@ export const PhaserContainer: React.FC<PhaserContainerProps> = ({ onSelectEntity
   return (
     <div
       ref={containerRef}
-      className="w-full h-full relative cursor-grab active:cursor-grabbing overflow-hidden"
+      className="w-full h-full relative cursor-grab active:cursor-grabbing overflow-hidden touch-none"
       onClick={(e) => {
         // Deselect if clicking on empty area of background
         if (e.target === containerRef.current) {
